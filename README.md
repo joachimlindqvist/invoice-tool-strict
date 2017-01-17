@@ -12,8 +12,8 @@ kan manipuleras genom att dispatcha actions.
 
 # redux-thunk
 `redux-thunk` gör att man kan returnera en funktion i en action creator.
-Detta kan användas när en action creator behöver skicka requests eller dispatcha flera actions 
-(exempel `setWorkerNet` i `invoice-builder-actions.js`). 
+Detta kan användas när en action creator behöver skicka requests, dispatcha flera actions eller 
+kolla validering/conditions innan dispatch av action (exempel `setWorkerNet` i `invoice-builder-actions.js`).
 
 # Listeners
 Lyssnar på ändringar i storen och dispatchar actions vid vissa conditions (exempel `toggleExpressPayment`).
