@@ -35,7 +35,7 @@ export let setHsd = (hsdType) => {
         });
 
         dispatch(showExpressPaymentButton(false));
-        
+
         if (getState().InvoiceBuilder.get('expressPayment')) {
             dispatch(setExpressPayment(false));
             dispatch(openModal(CannotUseExpressPaymentModal));
@@ -49,10 +49,14 @@ export let setExpressPayment = (value) => {
             dispatch(__setExpressPayment(value));
         }
         else {
-            dispatch(__setExpressPayment(value));
+            dispatch(__setExpressPayment(false));
         }
     };
-    
+
+}
+
+export let clearHsd = () => {
+    // ???????
 }
 
 export let setWorkerNet = (worker, net) => {
