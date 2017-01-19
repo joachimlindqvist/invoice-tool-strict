@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Header from './header';
 import PartOne from './part-one';
 import PartTwo from './part-two';
-import Modal from './Modal';
+import Modal from './modal';
 
 import { refreshCustomers } from '../reducers/customers/customers-actions';
 
