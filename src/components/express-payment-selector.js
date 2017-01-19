@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { setExpressPayment } from '../reducers/invoice-builder/invoice-builder-actions';
+import { showExpressPaymentSelector } from '../selectors/invoice-tool-selector';
 
 const ExpressPaymentSelector = ({ 
     showExpressPaymentButton,
@@ -25,7 +26,10 @@ const ExpressPaymentSelector = ({
 const mapStateToProps = (state) => {
     return {
         expressPayment: state.InvoiceBuilder.get('expressPayment'),
-        showExpressPaymentButton: state.InvoiceTool.get('showExpressPaymentButton')
+        showExpressPaymentButton: showExpressPaymentSelector(
+            state.InvoiceBuilder.get('customer'),
+            state.InvoiceBuilder.get('hsd')
+        )
     }
 }
 

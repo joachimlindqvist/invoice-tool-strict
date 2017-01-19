@@ -1,4 +1,3 @@
-import { showExpressPaymentButton } from '../invoice-tool/invoice-tool-actions';
 import { openModal } from '../modal/modal-actions';
 import CannotUseExpressPaymentModal from '../../components/cannot-use-express-payment-modal';
 
@@ -16,11 +15,7 @@ export let selectCustomer = (customer) => {
             payload: customer
         });
 
-        if (customer.get('country') === null || customer.get('country') === 'SWEDEN') {
-            dispatch(showExpressPaymentButton(true));
-        }
-        else {
-            dispatch(showExpressPaymentButton(false));
+        if (customer.get('country') !== null && customer.get('country') !== 'SWEDEN') {
             dispatch(setExpressPayment(false));
             dispatch(openModal(CannotUseExpressPaymentModal));
         }
@@ -34,12 +29,17 @@ export let setHsd = (hsdType) => {
             payload: hsdType
         });
 
-        dispatch(showExpressPaymentButton(false));
-
         if (getState().InvoiceBuilder.get('expressPayment')) {
             dispatch(setExpressPayment(false));
             dispatch(openModal(CannotUseExpressPaymentModal));
         }
+    }
+}
+
+export let clearHsd = () => {
+    return {
+        type: 'SET_HSD',
+        payload: null
     }
 }
 
@@ -53,10 +53,6 @@ export let setExpressPayment = (value) => {
         }
     };
 
-}
-
-export let clearHsd = () => {
-    // ???????
 }
 
 export let setWorkerNet = (worker, net) => {
