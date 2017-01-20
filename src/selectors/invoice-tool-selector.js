@@ -8,6 +8,10 @@ export const getHsd = (state) => {
     return state.InvoiceBuilder.get('hsd');
 }
 
+export const getExpressPayment = (state) => {
+    return state.InvoiceBuilder.get('expressPayment');
+}
+
 export const showExpressPaymentSelector = createSelector(
     [ getCustomerCountry, getHsd ],
     (country, hsd) => {

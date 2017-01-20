@@ -1,5 +1,6 @@
 import { openModal } from '../modal/modal-actions';
 import CannotUseExpressPaymentModal from '../../components/cannot-use-express-payment-modal';
+import { getCustomerCountry } from '../../selectors/invoice-tool-selector';
 
 let __setExpressPayment = (value) => {
     return {
@@ -46,11 +47,13 @@ export let clearHsd = () => {
 
 export let setExpressPayment = (value) => {
     return (dispatch, getState) => {
-        if (getState().InvoiceBuilder.get('customer').get('country') === 'SWEDEN') {
+        const customer = getCustomerCountry(getState());
+        if (customer === undefined || customer === 'SWEDEN') {
             dispatch(__setExpressPayment(value));
         }
         else {
             dispatch(__setExpressPayment(false));
+            dispatch(openModal(CannotUseExpressPaymentModal));
         }
     };
 
