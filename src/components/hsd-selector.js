@@ -9,7 +9,7 @@ const HsdSelector = ({ showHsdSelector, setHsdRot, setHsdRut, clearHsd }) => {
     if (!showHsdSelector) {
         return null;
     }
-    
+
     return (
         <div>
             <button onClick={setHsdRot}>{'ROT'}</button>
@@ -21,7 +21,7 @@ const HsdSelector = ({ showHsdSelector, setHsdRot, setHsdRut, clearHsd }) => {
 
 const mapStateToProps = (state) => {
     return {
-        showHsdSelector: showHsdSelector(state.InvoiceBuilder.get('customer'))
+        showHsdSelector: showHsdSelector(state)
     }
 }
 

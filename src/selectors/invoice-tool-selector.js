@@ -1,9 +1,23 @@
-export const showExpressPaymentSelector = (customer, hsd) => {
-    const correctCountry = customer.get('country') === undefined || customer.get('country') === 'SWEDEN';
-    const notHsd = hsd === null;
-    return correctCountry && notHsd;
+import { createSelector } from 'reselect';
+
+export const getCustomerCountry = (state) => {
+    return state.InvoiceBuilder.get('customer').get('country');
 }
 
-export const showHsdSelector = (customer) => {
-    return customer.get('country') === undefined || customer.get('country') === 'SWEDEN';
+export const getHsd = (state) => {
+    return state.InvoiceBuilder.get('hsd');
 }
+
+export const showExpressPaymentSelector = createSelector(
+    [ getCustomerCountry, getHsd ],
+    (country, hsd) => {
+        const correctCountry = country === undefined || country === 'SWEDEN';
+        const notHsd = hsd === null;
+        return correctCountry && notHsd;
+    }
+);
+
+export const showHsdSelector = createSelector(
+    getCustomerCountry,
+    (country) => country === undefined || country === 'SWEDEN'
+);

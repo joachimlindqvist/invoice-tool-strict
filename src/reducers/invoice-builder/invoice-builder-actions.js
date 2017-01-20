@@ -17,6 +17,7 @@ export let selectCustomer = (customer) => {
 
         if (customer.get('country') !== null && customer.get('country') !== 'SWEDEN') {
             dispatch(setExpressPayment(false));
+            dispatch(clearHsd());
             dispatch(openModal(CannotUseExpressPaymentModal));
         }
     }
