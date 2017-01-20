@@ -1,7 +1,7 @@
 export const listen = (store, select, onChange) => {
   let currentState;
 
-  function handleChange() {
+  function onListenedValueChange() {
     let nextState = select(store.getState());
     if (nextState !== currentState) {
       currentState = nextState;
@@ -9,8 +9,8 @@ export const listen = (store, select, onChange) => {
     }
   }
 
-  let unsubscribe = store.subscribe(handleChange);
-  handleChange();
+  let unsubscribe = store.subscribe(onListenedValueChange);
+  onListenedValueChange();
   return unsubscribe;
 }
 

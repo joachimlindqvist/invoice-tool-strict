@@ -1,15 +1,62 @@
-export let selectCustomer = (customer) => {
-    return {
-        type: 'SELECT_CUSTOMER',
-        payload: customer
-    }
-}
+import { openModal } from '../modal/modal-actions';
+import CannotUseExpressPaymentModal from '../../components/cannot-use-express-payment-modal';
+import { getCustomerCountry } from '../../selectors/invoice-tool-selector';
 
-export let setExpressPayment = (value) => {
+let __setExpressPayment = (value) => {
     return {
         type: 'SET_EXPRESS_PAYMENT',
         payload: value
     }
+}
+
+export let selectCustomer = (customer) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'SELECT_CUSTOMER',
+            payload: customer
+        });
+
+        if (customer.get('country') !== null && customer.get('country') !== 'SWEDEN') {
+            dispatch(setExpressPayment(false));
+            dispatch(clearHsd());
+            dispatch(openModal(CannotUseExpressPaymentModal));
+        }
+    }
+}
+
+export let setHsd = (hsdType) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: 'SET_HSD',
+            payload: hsdType
+        });
+
+        if (getState().InvoiceBuilder.get('expressPayment')) {
+            dispatch(setExpressPayment(false));
+            dispatch(openModal(CannotUseExpressPaymentModal));
+        }
+    }
+}
+
+export let clearHsd = () => {
+    return {
+        type: 'SET_HSD',
+        payload: null
+    }
+}
+
+export let setExpressPayment = (value) => {
+    return (dispatch, getState) => {
+        const customer = getCustomerCountry(getState());
+        if (customer === undefined || customer === 'SWEDEN') {
+            dispatch(__setExpressPayment(value));
+        }
+        else {
+            dispatch(__setExpressPayment(false));
+            dispatch(openModal(CannotUseExpressPaymentModal));
+        }
+    };
+
 }
 
 export let setWorkerNet = (worker, net) => {

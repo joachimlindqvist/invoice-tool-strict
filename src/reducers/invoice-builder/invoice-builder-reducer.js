@@ -14,7 +14,8 @@ export const initialState = Map({
             gross: 1500,
             net: 1000
         })
-    ])
+    ]),
+    hsd: null
 });
 
 export default (state = initialState, action) => {
@@ -22,9 +23,11 @@ export default (state = initialState, action) => {
         case 'SELECT_CUSTOMER':
             return state.set('customer', Map(action.payload));
         case 'SET_EXPRESS_PAYMENT':
-            return state.set('expressPayment', action.payload)
+            return state.set('expressPayment', action.payload);
         case 'SET_MONEY_DISTRIBUTION_WORKERS':
-            return state.set('workers', fromJS(action.payload))
+            return state.set('workers', fromJS(action.payload));
+        case 'SET_HSD':
+            return state.set('hsd', action.payload);
     }
     return state;
 }

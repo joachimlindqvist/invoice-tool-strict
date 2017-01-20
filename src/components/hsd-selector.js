@@ -1,12 +1,36 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const HsdSelector = () => {
+import { setHsd, clearHsd } from '../reducers/invoice-builder/invoice-builder-actions';
+import { showHsdSelector } from '../selectors/invoice-tool-selector';
+
+const HsdSelector = ({ showHsdSelector, setHsdRot, setHsdRut, clearHsd }) => {
+
+    if (!showHsdSelector) {
+        return null;
+    }
+
     return (
         <div>
-            <button>{'ROT'}</button>
-            <button>{'RUT'}</button>
+            <button onClick={setHsdRot}>{'ROT'}</button>
+            <button onClick={setHsdRut}>{'RUT'}</button>
+            <button onClick={clearHsd}>{'clear hsd'}</button>
         </div>
     )
 }
 
-export default HsdSelector;
+const mapStateToProps = (state) => {
+    return {
+        showHsdSelector: showHsdSelector(state)
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setHsdRot: () => dispatch(setHsd('ROT')),
+        setHsdRut: () => dispatch(setHsd('RUT')),
+        clearHsd: () => dispatch(clearHsd())
+    }
+}
+
+export default  connect(mapStateToProps, mapDispatchToProps)(HsdSelector);
