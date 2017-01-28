@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectCustomer } from '../reducers/invoice-builder/invoice-builder-actions';
+import { setCustomer } from '../reducers/invoice-builder/invoice-builder-actions';
 import { getById } from '../selectors/general';
 
-const CustomerList = ({ customers, selectCustomer }) => {
+const CustomerList = ({ customers, setCustomer }) => {
 
     const onCustomerChange = (e) => {
-        selectCustomer(getById(customers, e.target.value));
+        setCustomer(getById(customers, e.target.value));
     }
 
     let customerOptions = customers.map((customer, key) => {
@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        selectCustomer: (customer) => dispatch(selectCustomer(customer))
+        setCustomer: (customer) => dispatch(setCustomer(customer))
     }
 };
 

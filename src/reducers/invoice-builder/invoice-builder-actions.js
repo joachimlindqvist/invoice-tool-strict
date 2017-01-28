@@ -1,6 +1,9 @@
 import { openModal } from '../modal/modal-actions';
 import CannotUseExpressPaymentModal from '../../components/cannot-use-express-payment-modal';
+import CannotUseOtherCurrencyWithHsdModal from '../../components/cannot-use-other-currency-with-hsd-modal';
 import { getCustomerCountry } from '../../selectors/invoice-tool-selector';
+import CurrencyEntity from '../../entities/currency-entity';
+import fetch from '../../fetch-mock';
 
 let __setExpressPayment = (value) => {
     return {
@@ -9,7 +12,7 @@ let __setExpressPayment = (value) => {
     }
 }
 
-export let selectCustomer = (customer) => {
+export let setCustomer = (customer) => {
     return (dispatch) => {
         dispatch({
             type: 'SELECT_CUSTOMER',
@@ -24,6 +27,25 @@ export let selectCustomer = (customer) => {
     }
 }
 
+export let setCurrency = (currency) => {
+    return (dispatch, getState) => {
+        const hsd = getState().InvoiceBuilder.get('hsd');
+        if (!hsd || currency.get('id') === 'SEK') {
+            dispatch({
+                type: 'SET_CURRENCY',
+                payload: currency
+            });
+        }
+        else {
+            dispatch({
+                type: 'SET_CURRENCY',
+                payload: 'SEK'
+            });
+            dispatch(openModal(CannotUseOtherCurrencyWithHsdModal));
+        }
+    } 
+}
+
 export let setHsd = (hsdType) => {
     return (dispatch, getState) => {
         dispatch({
@@ -31,9 +53,13 @@ export let setHsd = (hsdType) => {
             payload: hsdType
         });
 
-        if (getState().InvoiceBuilder.get('expressPayment')) {
-            dispatch(setExpressPayment(false));
-            dispatch(openModal(CannotUseExpressPaymentModal));
+        if (hsdType !== null) {
+            if (getState().InvoiceBuilder.get('expressPayment')) {
+                dispatch(setCurrency(new CurrencyEntity({ id: 'SEK' })));
+                dispatch(setExpressPayment(false));
+                dispatch(openModal(CannotUseExpressPaymentModal));
+            }
+            dispatch(setCurrency(new CurrencyEntity({ id: 'SEK' })));
         }
     }
 }
@@ -62,21 +88,20 @@ export let setExpressPayment = (value) => {
 export let setWorkerNet = (worker, net) => {
     return (dispatch, getState) => {
         // Använd getState och worker för att skapa requestet till /invoicecalculations
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(dispatch(setMoneyDistributionWorker([
-                    {
-                        total: net * 2,
-                        gross: net * 1.5,
-                        net
-                    },
-                    {
-                        total: net * 2,
-                        gross: net * 1.5,
-                        net
-                    }
-                ])));
-            }, 1337)
+        const response = [
+            {
+                total: net * 2,
+                gross: net * 1.5,
+                net
+            },
+            {
+                total: net * 2,
+                gross: net * 1.5,
+                net
+            }
+        ];
+        return fetch('http://api.ff/invoicecalculations', {}, response).then((response) => {
+            dispatch(setMoneyDistributionWorker(response));            
         });
     }
 }

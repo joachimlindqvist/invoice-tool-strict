@@ -3,10 +3,14 @@ import { connect } from 'react-redux';
 
 import SettingsModal from './settings-modal';
 import CannotUseExpressPaymentModal from './cannot-use-express-payment-modal';
+import CannotUseOtherCurrencyWithHsdModal from './cannot-use-other-currency-with-hsd-modal';
 
-const modals = {
+import { closeModal } from '../reducers/modal/modal-actions';
+
+const registeredModals = {
     SettingsModal,
-    CannotUseExpressPaymentModal
+    CannotUseExpressPaymentModal,
+    CannotUseOtherCurrencyWithHsdModal
 }
 
 export const Modal = ({ modal, loading }) => {
@@ -15,7 +19,7 @@ export const Modal = ({ modal, loading }) => {
         return null
     }
 
-    const OpenModal = modals[modal];
+    const OpenModal = registeredModals[modal];
 
     if (!OpenModal) {
         console.error(`Tried to open modal \`${modal}\` but no such modal is defined in the Modal component.`);
@@ -36,4 +40,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Modal);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        closeModal: () => dispatch(closeModal())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

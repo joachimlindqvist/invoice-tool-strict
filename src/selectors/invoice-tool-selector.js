@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 
 export const getCustomerCountry = (state) => {
-    return state.InvoiceBuilder.get('customer').get('country');
+    const customer = state.InvoiceBuilder.get('customer');
+    return customer ? customer.get('country') : null;
 }
 
 export const getHsd = (state) => {
@@ -10,6 +11,14 @@ export const getHsd = (state) => {
 
 export const getExpressPayment = (state) => {
     return state.InvoiceBuilder.get('expressPayment');
+}
+
+export const getCurrency = (state) => {
+    return state.InvoiceBuilder.get('currency');
+}
+
+export const getCurrencies = (state) => {
+    return state.InvoiceTool.get('currencies');
 }
 
 export const showExpressPaymentSelector = createSelector(
@@ -25,3 +34,10 @@ export const showHsdSelector = createSelector(
     getCustomerCountry,
     (country) => country === undefined || country === 'SWEDEN'
 );
+
+export const enabledCurrencySelector = createSelector(
+    getHsd,
+    (hsd) => {
+        return !hsd;
+    }
+)

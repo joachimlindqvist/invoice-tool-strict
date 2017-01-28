@@ -1,7 +1,8 @@
 import { Map, List, fromJS } from 'immutable';
+import CurrencyEntity from '../../entities/currency-entity';
 
 export const initialState = Map({
-    customer: Map(),
+    customer: null,
     expressPayment: false,
     workers: List([
         Map({
@@ -15,7 +16,8 @@ export const initialState = Map({
             net: 1000
         })
     ]),
-    hsd: null
+    hsd: null,
+    currency: new CurrencyEntity({ id: 'SEK' })
 });
 
 export default (state = initialState, action) => {
@@ -28,6 +30,9 @@ export default (state = initialState, action) => {
             return state.set('workers', fromJS(action.payload));
         case 'SET_HSD':
             return state.set('hsd', action.payload);
+        case 'SET_CURRENCY':
+            return state.set('currency', action.payload);
     }
+    
     return state;
 }

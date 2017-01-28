@@ -1,8 +1,14 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
+import CurrencyEntity from '../../entities/currency-entity';
 
 export const initialState = Map({
     showExpressPaymentButton: true,
-    errorCannotUserExpressPayment: false
+    errorCannotUserExpressPayment: false,
+    currencies: List([
+        new CurrencyEntity({ id: 'SEK' }),
+        new CurrencyEntity({ id: 'USD' }),
+        new CurrencyEntity({ id: 'GBP' })
+    ])
 });
 
 export default (state = initialState, action) => {

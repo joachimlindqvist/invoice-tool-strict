@@ -23,3 +23,9 @@ export const setModalLoading = (loading) => {
         payload: loading
     }
 }
+
+export const closeModal = () => {
+    return {
+        type: 'CLOSE_MODAL'
+    }
+}

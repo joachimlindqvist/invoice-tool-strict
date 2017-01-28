@@ -2,7 +2,7 @@ import createStore from '../test-store';
 
 import { toggleExpressPayment } from '../../src/listeners/invoice-builder-listeners';
 import { showExpressPaymentButton } from '../../src/reducers/invoice-tool/invoice-tool-actions';
-import { selectCustomer, setExpressPayment } from '../../src/reducers/invoice-builder/invoice-builder-actions';
+import { setCustomer, setExpressPayment } from '../../src/reducers/invoice-builder/invoice-builder-actions';
 
 describe('Invoice Builder listener', function () {
     describe('toggleExpressPayment', function () {
@@ -23,7 +23,7 @@ describe('Invoice Builder listener', function () {
         it('should hide express button and switch to non-express payment if country isn\'t Sweden.', function () {
             const store = createStore();
             const unsubscribe = toggleExpressPayment(store);
-            store.dispatch(selectCustomer({ country: 'URUGUAY' }));
+            store.dispatch(setCustomer({ country: 'URUGUAY' }));
             expect(store.getActions()[2]).toEqual(showExpressPaymentButton(false));
             expect(store.getActions()[3]).toEqual(setExpressPayment(false));
             unsubscribe();
@@ -41,7 +41,7 @@ describe('Invoice Builder listener', function () {
         it('should hide express button and switch to non-express payment if country isn\'t Sweden. #2', function () {
             const store = createStore();
             const unsubscribe = toggleExpressPayment(store);
-            store.dispatch(selectCustomer({ country: 'URUGUAY' }));
+            store.dispatch(setCustomer({ country: 'URUGUAY' }));
             expect(store.getState().InvoiceTool.get('showExpressPaymentButton')).toBeFalsy();
             expect(store.getState().InvoiceBuilder.get('expressPayment')).toBeFalsy();
             unsubscribe();
