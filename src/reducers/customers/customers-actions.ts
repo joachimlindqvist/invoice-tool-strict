@@ -1,4 +1,8 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
+import { IAction, IThunkAction, IListAction } from '../index';
+import * as types from './customers-types';
+import * as actionTypes from './customers-action-types';
+import Customer from '../../entities/customer-entity';
 
 const createDummyCustomer = ({ id, country = 'SWEDEN' }) => {
     return Map({
@@ -8,17 +12,18 @@ const createDummyCustomer = ({ id, country = 'SWEDEN' }) => {
     });
 };
 
-export let refreshCustomers = () => {
+export let refreshCustomers = () : IThunkAction => {
     return (dispatch) => {
         dispatch(fetchingCustomers());
         setTimeout(() => {
             dispatch(stoppedFetchingCustomers())
-            dispatch(setCustomers())
-        }, 2000)
+            dispatch(setCustomers(List<Customer>([])))
+        }, 2000);
+        return 'true';
     };
 }
 
-export let createCustomer = () => {
+export let createCustomer = () : IThunkAction => {
     return (dispatch, getState) => {
         dispatch(creatingCustomer());
         setTimeout(() => {
@@ -28,43 +33,40 @@ export let createCustomer = () => {
     }
 }
 
-export let creatingCustomer = () => {
+export let creatingCustomer = () : IAction => {
     return {
         type: 'CREATING_CUSTOMER'
     }
 }
 
-export let stoppedCreatingCustomer = () => {
+export let stoppedCreatingCustomer = () : IAction => {
     return {
         type: 'STOPPED_CREATING_CUSTOMER'
     }
 }
 
-export let addCustomer = (id) => {
+export let addCustomer = (id) : IAction => {
     return {
         type: 'ADD_CUSTOMER',
         payload: createDummyCustomer({ id })
     }
 }
 
-export let fetchingCustomers = () => {
+export let fetchingCustomers = () : IAction => {
     return {
         type: 'FETCHING_CUSTOMERS'
     };
 };
 
-export let stoppedFetchingCustomers = () => {
+export let stoppedFetchingCustomers = () : IAction => {
     return {
         type: 'STOPPED_FETCHING_CUSTOMERS'
     };
 };
 
-export let setCustomers = () => {
+export let setCustomers = (customers: List<Customer>) : actionTypes.SetCustomersAction => {
     return {
-        type: 'SET_CUSTOMERS',
-        payload: [
-            createDummyCustomer({ id: 0 }),
-            createDummyCustomer({ id: 1, country: 'URUGUAY' }),
-        ]
+        type: types.SET_CUSTOMERS,
+        payload: customers
     };
 }
